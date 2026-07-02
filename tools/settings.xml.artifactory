@@ -1,0 +1,52 @@
+<settings>
+  <mirrors>
+    <mirror>
+      <!--Send all requests to the public group -->
+      <id>example</id>
+      <mirrorOf>*</mirrorOf>
+      <url>https://example.jfrog.io/artifactory/examplegroup/</url>
+    </mirror>
+  </mirrors>
+
+  <activeProfiles>
+    <activeProfile>repo-manager</activeProfile>
+  </activeProfiles>
+
+  <profiles>
+    <profile>
+      <id>repo-manager</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+  <servers>
+    <server>
+      <id>example</id>
+      <username>${env.ARTIFACTORY_USERNAME}</username>
+      <password>${env.ARTIFACTORY_PASSWORD}</password>
+    </server>
+  </servers>
+</settings>

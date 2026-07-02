@@ -1,0 +1,64 @@
+<settings>
+
+  <mirrors>
+    <mirror>
+      <!-- Set the identifier for the server credentials for repository manager access
+      must match server name in "servers" -->
+      <id>nexus</id>
+      <!-- Send all requests to the repository manager URL -->
+      <mirrorOf>*</mirrorOf>
+      <!-- Ordered repository group with 
+        - java-remediated
+        - java
+        - Maven central
+        - anything else needed, including internal repos
+      -->
+      <!--<url>https://repo.example.com:8443/repository/java-all/</url>-->
+      <url>http://localhost:8081/repository/java-all/</url>
+    </mirror>
+  </mirrors>
+
+  <!-- Activate repo manager and override central repo from Maven itself with invalid URLs -->
+  <activeProfiles>
+    <activeProfile>repo-manager</activeProfile>
+  </activeProfiles>
+  <profiles>
+    <profile>
+      <id>repo-manager</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+  <!--
+  <servers>
+    <server>
+      <id>nexus</id>
+      <username>YOUR_USERNAME_FOR_REPOSITORY_MANAGER</username>
+      <password>YOUR_PASSWORD</password>
+    </server>
+  </servers>
+  -->
+</settings>

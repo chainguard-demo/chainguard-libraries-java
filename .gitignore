@@ -1,0 +1,32 @@
+# Java build output
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+# Local repository populated by the demo/test scripts
+repo/
+# Generated script in tools directory
+java-access.sh
+
+# Gradle
+.gradle/
+build/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
