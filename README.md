@@ -28,6 +28,8 @@ repository manager, using the example settings and commands in
 * [Chainguard Libraries documentation](https://edu.chainguard.dev/chainguard/libraries/)
 * [Chainguard Libraries for Java documentation](https://edu.chainguard.dev/chainguard/libraries/java/)
 * [Chainguard learning labs with more demos](https://edu.chainguard.dev/software-security/learning-labs/)
+* [Chainguard Libraries for JavaScript examples](https://github.com/mosabua/chainguard-libraries-javascript)
+* [Chainguard Libraries for Python examples](https://github.com/mosabua/chainguard-libraries-python)
 
 ## Videos
 
