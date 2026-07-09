@@ -1,67 +1,94 @@
 # Example commands for Chainguard Libraries access
 
-List entitlements:
+`chainctl` commands for setting up and managing access to Chainguard Libraries.
+The pull-token commands are what the demos and settings files in this repository
+depend on. The entitlement and policy commands are for administrators setting up
+an organization.
 
-```sh
+## Prerequisites
+
+Authenticate to the Chainguard platform first:
+
+```shell
+chainctl auth login
+```
+
+Creating entitlements and policies requires appropriate permissions on the
+organization. Generating a pull token requires an active libraries entitlement.
+
+Most users belong to a single organization, so `chainctl` selects it
+automatically or prompts you to choose interactively. Add `--parent=<org>` to
+any command below only if you belong to more than one organization and need it
+to run non-interactively, for example in CI.
+
+## Entitlements
+
+List existing entitlements:
+
+```shell
 chainctl libraries entitlements list
 ```
 
-Create entitlement for Java with fallback to Maven Central activated:
+Create an entitlement for Java with the upstream Maven Central fallback enabled:
 
 ```shell
-chainctl libraries entitlements create --ecosystems=JAVA --policy=CHAINGUARD_AND_UPSTREAM
+chainctl libraries entitlements create --ecosystems=JAVA --policy=chainguard_and_upstream
 ```
 
-Create pull token for access to Java libraries and output environment variable
-commands. Token valid for 30 days. The `--output env` form sets
-`CHAINGUARD_JAVA_IDENTITY_ID` and `CHAINGUARD_JAVA_TOKEN`, the variables the
-direct-access Maven settings and the test scripts read.
+`--ecosystems` is required and takes a comma-separated list, for example
+`JAVA,PYTHON`. The `--policy` value is `chainguard` for Chainguard rebuilds
+only, or `chainguard_and_upstream` to add the upstream fallback.
+
+## Pull tokens
+
+A pull token provides the credentials the Maven and Gradle configurations read.
+The `--output env` form prints shell commands that set
+`CHAINGUARD_JAVA_IDENTITY_ID` and `CHAINGUARD_JAVA_TOKEN`, the two variables the
+direct-access settings files and the test scripts use.
+
+Print the export commands:
 
 ```shell
 chainctl auth pull-token --output env --repository=java
 ```
 
-Evaluate the output directly to export both variables into the current shell:
+Evaluate the output to export both variables into the current shell:
 
 ```shell
 eval "$(chainctl auth pull-token --output env --repository=java)"
 ```
 
-Create pull token for access to Java libraries for the chainguard.edu
-organization, output environment variable commands, and pipe commands into a
-shell script. Change the parent parameter to your organization name.
+`--repository` must be one of `oci`, `apk`, `java`, `python`, or `javascript`.
+Control validity with `--ttl`, for example `--ttl=24h`; the maximum is `8760h`,
+one year.
+
+Write the export commands to a script to source later:
 
 ```shell
-chainctl auth pull-token --output env --repository=java --parent=chainguard.edu > java-access.sh
-```
-
-Load the environment variables for use in a terminal.
-
-```shell
+chainctl auth pull-token --output env --repository=java > java-access.sh
 source java-access.sh
 ```
 
-Create new pull token for access to Java libraries and set environment variables:
+## Policies
 
-```shell
-eval $(chainctl auth pull-token --output env --repository=java --parent=chainguard.edu)
-```
+Policies control the cooldown window and package gating for an ecosystem. A
+newly created policy is inactive until it is enabled for an ecosystem.
 
-Create a policy for no cooldown and use it for Java:
+Create a policy with no cooldown:
 
 ```shell
 chainctl libraries policy create --name=no-cooldown --cooldown-days=0
+```
+
+Enable it for Java in enforcing mode:
+
+```shell
 chainctl libraries policy enable --policy=no-cooldown --ecosystem=JAVA --mode=ENFORCE
 ```
 
-List policies
+List policies and their bindings to ecosystems:
 
 ```shell
 chainctl libraries policy list
-```
-
-List policy bindings to ecosystems:
-
-``` shell
 chainctl libraries policy bindings list
 ```

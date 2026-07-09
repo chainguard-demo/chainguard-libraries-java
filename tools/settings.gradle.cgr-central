@@ -1,0 +1,62 @@
+/*
+ * Direct access to the Chainguard Libraries for Java repositories at
+ * libraries.cgr.dev, with upstream Maven Central as the final fallback. The
+ * contexts are listed explicitly, in order:
+ *
+ *   1. java-remediated — remediated *+cgr.N artifacts
+ *   2. java            — Chainguard rebuilds and the protected Maven Central proxy
+ *   3. mavenCentral    — upstream Maven Central, for anything not served above
+ *
+ * Plugin resolution adds the Gradle Plugin Portal as its final fallback.
+ *
+ * Credentials come from a Chainguard Libraries pull token. Export
+ * CHAINGUARD_JAVA_IDENTITY_ID and CHAINGUARD_JAVA_TOKEN first.
+ *
+ * This is a standalone reference. Merge the pluginManagement and
+ * dependencyResolutionManagement blocks into your own settings.gradle and keep
+ * your existing rootProject.name.
+ */
+
+pluginManagement {
+    repositories {
+        maven {
+            name = 'chainguardJavaRemediated'
+            url = uri('https://libraries.cgr.dev/java-remediated/')
+            credentials {
+                username = providers.environmentVariable('CHAINGUARD_JAVA_IDENTITY_ID').orNull ?: ''
+                password = providers.environmentVariable('CHAINGUARD_JAVA_TOKEN').orNull ?: ''
+            }
+        }
+        maven {
+            name = 'chainguardJava'
+            url = uri('https://libraries.cgr.dev/java/')
+            credentials {
+                username = providers.environmentVariable('CHAINGUARD_JAVA_IDENTITY_ID').orNull ?: ''
+                password = providers.environmentVariable('CHAINGUARD_JAVA_TOKEN').orNull ?: ''
+            }
+        }
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        maven {
+            name = 'chainguardJavaRemediated'
+            url = uri('https://libraries.cgr.dev/java-remediated/')
+            credentials {
+                username = providers.environmentVariable('CHAINGUARD_JAVA_IDENTITY_ID').orNull ?: ''
+                password = providers.environmentVariable('CHAINGUARD_JAVA_TOKEN').orNull ?: ''
+            }
+        }
+        maven {
+            name = 'chainguardJava'
+            url = uri('https://libraries.cgr.dev/java/')
+            credentials {
+                username = providers.environmentVariable('CHAINGUARD_JAVA_IDENTITY_ID').orNull ?: ''
+                password = providers.environmentVariable('CHAINGUARD_JAVA_TOKEN').orNull ?: ''
+            }
+        }
+        mavenCentral()
+    }
+}

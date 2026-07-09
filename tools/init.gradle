@@ -1,0 +1,49 @@
+/*
+ * Global Chainguard Libraries for Java configuration for Gradle.
+ *
+ * Install as $GRADLE_USER_HOME/init.gradle (usually ~/.gradle/init.gradle), or
+ * as ~/.gradle/init.d/chainguard.init.gradle, to apply it to every Gradle build
+ * on the machine without editing each project's settings.gradle. You can also
+ * pass it to a single build with: gradle --init-script init.gradle <task>
+ *
+ * It injects the two Chainguard Libraries contexts into both plugin and
+ * dependency resolution, in order:
+ *   1. java-remediated — remediated *+cgr.N artifacts
+ *   2. java            — Chainguard rebuilds and the Maven Central mirror
+ *
+ * There is no Maven Central fallback, matching tools/settings.gradle.cgr-only.
+ * Add repositories.mavenCentral() and repositories.gradlePluginPortal() below
+ * for the cgr-central equivalent.
+ *
+ * Credentials come from a Chainguard Libraries pull token. Export
+ * CHAINGUARD_JAVA_IDENTITY_ID and CHAINGUARD_JAVA_TOKEN first.
+ */
+
+def chainguardRepositories = { repositories ->
+    repositories.maven {
+        name = 'chainguardJavaRemediated'
+        url = uri('https://libraries.cgr.dev/java-remediated/')
+        credentials {
+            username = System.getenv('CHAINGUARD_JAVA_IDENTITY_ID') ?: ''
+            password = System.getenv('CHAINGUARD_JAVA_TOKEN') ?: ''
+        }
+    }
+    repositories.maven {
+        name = 'chainguardJava'
+        url = uri('https://libraries.cgr.dev/java/')
+        credentials {
+            username = System.getenv('CHAINGUARD_JAVA_IDENTITY_ID') ?: ''
+            password = System.getenv('CHAINGUARD_JAVA_TOKEN') ?: ''
+        }
+    }
+}
+
+// Plugin resolution is configured before the settings file is evaluated.
+beforeSettings { settings ->
+    settings.pluginManagement.repositories { chainguardRepositories(delegate) }
+}
+
+// Dependency resolution must be configured during settings evaluation.
+settingsEvaluated { settings ->
+    settings.dependencyResolutionManagement.repositories { chainguardRepositories(delegate) }
+}
