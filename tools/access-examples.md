@@ -69,6 +69,17 @@ chainctl auth pull-token --output env --repository=java > java-access.sh
 source java-access.sh
 ```
 
+If you are a member of multiple organizations the preceding example commands
+must use the `--parent` parameter with the name of your organization:
+
+```shell
+eval "$(chainctl auth pull-token --output env --parent=chainguard.edu --repository=java)"
+```
+
+```shell
+chainctl auth pull-token --output env --repository=java --parent=chainguard.edu > java-access.sh
+```
+
 ## Policies
 
 Policies control the cooldown window and package gating for an ecosystem. A
@@ -78,6 +89,12 @@ Create a policy with no cooldown:
 
 ```shell
 chainctl libraries policy create --name=no-cooldown --cooldown-days=0
+```
+
+Show the policy details:
+
+```shell
+chainctl libraries policy describe no-cooldown
 ```
 
 Enable it for Java in enforcing mode:
