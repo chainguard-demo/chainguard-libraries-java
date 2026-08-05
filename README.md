@@ -35,6 +35,7 @@ repository manager, using the example settings and commands in
 
 ## Videos
 
+* [July 2026 Learning Lab about Chainguard Libraries for Java with CVE remediation, fallback, and policies, webinar recap with timestamped video, questions, and demos)](https://edu.chainguard.dev/software-security/learning-labs/ll202607/)
 * [Chainguard Libraries fallback to upstream and policies](https://www.youtube.com/watch?v=o8DY_V4bkbg)
 * [Chainguard Libraries for Java - CVE remediation and browsing](https://www.youtube.com/watch?v=hXL0Y0zwUYc)
 * [Chainguard Libraries for Java - CVE remediation example projects](https://www.youtube.com/watch?v=-a1CungNdWw)
