@@ -7,6 +7,7 @@ Available directories:
 
 * `cve-2024-38819` - Spring Framework application to showcase how to fix CVE-2024-38819
 * `cve-2026-22732` - Spring Security application to showcase how to fix CVE-2026-22732
+* `cgp-xpq5-jm7p-884r` - jjwt signature-stripping authentication bypass disclosed through Chainguard Athena, remediated with no code change
 * `spring-boot` - minimal Spring Boot web application that resolves from Chainguard Libraries, buildable with both Maven and Gradle
 * `tools` - collection of scripts and example configuration files
 
