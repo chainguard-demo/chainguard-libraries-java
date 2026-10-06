@@ -10,7 +10,7 @@ repository also ships its own build-tool configuration.
 
 | Resource | Purpose |
 |---|---|
-| [`access-examples.md`](access-examples.md) | `chainctl` command examples — entitlements, pull tokens, and policies. Start here to set up credentials. See [Authentication](#authentication). |
+| [`access-examples.md`](access-examples.md) | `chainctl` command examples — entitlements, pull tokens, policies, and artifact verification. Start here to set up credentials. See [Authentication](#authentication). |
 | `download-single-file-curl.sh` | Download a single artifact with `curl` to confirm direct access. See [Test scripts](#test-scripts). |
 | `download-dependency-tree-maven.sh` | Resolve an artifact and its full dependency tree with Maven. See [Test scripts](#test-scripts). |
 | `settings.xml.*` | Five example Maven settings files, one per access path. See [Maven settings files](#maven-settings-files). |
@@ -159,6 +159,34 @@ environment — set them up first per [Authentication](#authentication).
 ./download-dependency-tree-maven.sh
 ./download-dependency-tree-maven.sh com.google.guava:guava:33.4.0-jre
 ```
+
+## Verify artifacts
+
+Once you have a local artifact, confirm how much of it was built from source by
+Chainguard with `chainctl libraries verify`. Unlike the test scripts and
+settings files, `verify` authenticates with your `chainctl auth login` session
+rather than the pull token environment variables, so no extra setup is needed
+once you are logged in.
+
+```bash
+# Verify the artifact the curl script downloaded
+chainctl libraries verify jackson-core-2.18.2.jar
+```
+
+Add `--output-attestations` to also download the SBOM and SLSA provenance for a
+verified, Chainguard-built Java artifact. `--output-dir repo` writes them under
+the same Maven-layout `repo/` tree the dependency-tree script populates, which
+this repository keeps git-ignored:
+
+```bash
+chainctl libraries verify jackson-core-2.18.2.jar \
+  --output-attestations --output-dir repo
+```
+
+The SPDX SBOM and SLSA provenance are saved as trusted Chainguard attestations,
+and CycloneDX SBOMs are saved when present but marked unverified. For the full
+file layout and behavior, see
+[`access-examples.md`](access-examples.md#verify-artifacts-and-download-attestations).
 
 ## Using a Maven settings file
 
