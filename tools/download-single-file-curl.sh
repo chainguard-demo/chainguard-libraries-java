@@ -35,7 +35,9 @@ echo "Writing to:  $OUTPUT_FILE"
 echo "Pass a different artifact path (and optional output file) as arguments, e.g."
 echo "  $0 com/google/guava/guava/33.4.0-jre/guava-33.4.0-jre.jar"
 
-curl -f -S -X GET \
+# -L follows the redirect the repository issues to its backing object storage;
+# without it curl saves the redirect response instead of the artifact.
+curl -f -S -L -X GET \
   "$BASE_URL/$ARTIFACT_PATH" \
   -u "$CHAINGUARD_JAVA_IDENTITY_ID:$CHAINGUARD_JAVA_TOKEN" \
   --output "$OUTPUT_FILE"
