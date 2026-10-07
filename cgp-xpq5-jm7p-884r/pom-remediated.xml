@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>dev.chainguard</groupId>
+  <artifactId>cgp-xpq5-jm7p-884r-demo</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>CGP-xpq5-jm7p-884r Demo (Remediated)</name>
+  <description>Interactive demo of CGP-xpq5-jm7p-884r — jjwt signature-stripping authentication bypass (Chainguard remediated)</description>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Same 0.7.0 line, Chainguard's source-built artifact with the Athena
+         patch backported. No code change, no disruptive upgrade. -->
+    <jjwt.version>0.7.0-0.cgr.1</jjwt.version>
+    <exec.mainClass>dev.chainguard.jjwtbypass.JwtDemo</exec.mainClass>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <!-- jjwt 0.7.0 calls javax.xml.bind.DatatypeConverter, removed from the JDK
+         in Java 11. Supply the JAXB API so the demo runs on a modern JDK. -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <mainClass>${exec.mainClass}</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
