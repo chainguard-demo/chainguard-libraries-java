@@ -47,9 +47,38 @@ is a drop-in replacement.
 - A Chainguard Libraries pull token exported as `CHAINGUARD_JAVA_IDENTITY_ID`
   and `CHAINGUARD_JAVA_TOKEN`, as described in the
   [`tools`](../tools/README.md) directory
+- [Grype](https://github.com/anchore/grype) for the scan step
 
 The demo projects use the bundled Maven wrapper, so no separate Maven install
 is needed.
+
+## Scanning it
+
+Start by scanning the project the way a CI pipeline would:
+
+```
+grype dir:.
+```
+
+Grype reads the dependencies declared in `pom.xml`, resolves
+`io.jsonwebtoken:jjwt:0.7.0`, and reports the project as clean:
+
+```
+ ✔ Indexed file system             .
+ ✔ Cataloged contents
+   ├── ✔ Packages                        [4 packages]
+   ├── ✔ Executables                     [0 executables]
+   ├── ✔ File metadata                   [1 locations]
+   └── ✔ File digests                    [1 files]
+ ✔ Scanned for vulnerabilities     [0 vulnerability matches]
+   ├── by severity: 0 critical, 0 high, 0 medium, 0 low, 0 negligible
+   └── by status:   0 fixed, 0 not-fixed, 0 ignored
+No vulnerabilities found
+```
+
+The finding has no CVE, so there is nothing for the scanner to match. Run
+`grype db update` beforehand so the scan uses a current vulnerability database
+and does not download one mid-demo.
 
 ## Running it
 
